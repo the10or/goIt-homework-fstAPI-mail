@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "goit-fastapo-homework"
+version = "0.1.0"
+description = ""
+authors = ["the10or <the10or@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+fastapi = { extras = ["all"], version = "^0.108.0" }
+sqlalchemy = "^2.0.25"
+alembic = "^1.13.1"
+psycopg2 = "^2.9.9"
+pydantic-extra-types = "^2.4.1"
+phonenumbers = "^8.13.27"
+faker = "^22.2.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
