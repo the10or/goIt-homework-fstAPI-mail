@@ -1,23 +1,24 @@
 from sqlalchemy import func, and_, extract
 
-from models.contacts import ContactDB
+from models.contacts import ContactDB, User
 
 
 class ContactRepository:
     def __init__(self, db):
         self.db = db
 
-    def get_all(self, limit, offset):
+    def get_all(self, limit, offset, user: User):
         return (
             self.db.query(ContactDB)
+            .filter(ContactDB.user_id == user.id)
             .order_by(ContactDB.id)
             .limit(limit)
             .offset(offset)
             .all()
         )
 
-    def get_by_id(self, id):
-        return self.db.get(ContactDB, id)
+    def get_by_id(self, id, user: User):
+        return self.db.query(ContactDB).filter(and_(ContactDB.id == id, ContactDB.user_id == user.id)).first()
 
     def create(self, contact):
         new_contact = ContactDB(**contact.dict())
@@ -38,16 +39,16 @@ class ContactRepository:
 
         return existing_contact
 
-    def get_by_name(self, name):
-        return self.db.query(ContactDB).filter(ContactDB.firstname == name).all()
+    def get_by_name(self, name, user: User):
+        return self.db.query(ContactDB).filter(and_(ContactDB.firstname == name, ContactDB.user_id == user.id)).all()
 
-    def get_by_email(self, email):
-        return self.db.query(ContactDB).filter(ContactDB.email == email).first()
+    def get_by_email(self, email, user: User):
+        return self.db.query(ContactDB).filter((ContactDB.email == email, ContactDB.user_id == user.id)).first()
 
-    def get_by_lastname(self, lastname):
-        return self.db.query(ContactDB).filter(ContactDB.lastname == lastname).all()
+    def get_by_lastname(self, lastname, user: User):
+        return self.db.query(ContactDB).filter(and_(ContactDB.lastname == lastname, ContactDB.user_id == user.id)).all()
 
-    def get_by_birthdate(self, today, next_week, year_to_change):
+    def get_by_birthdate(self, today, next_week, year_to_change, user: User):
         contacts = (
             self.db.query(ContactDB)
             .filter(
@@ -72,6 +73,7 @@ class ContactRepository:
                         )
                     )
                     <= next_week,
+                    ContactDB.user_id == user.id,
                 )
             )
             .all()
@@ -79,7 +81,9 @@ class ContactRepository:
 
         return contacts
 
-    def delete(self, id):
-        self.db.query(ContactDB).filter(ContactDB.id == id).delete()
+    def delete(self, id, user: User):
+        contact = self.db.query(ContactDB).filter(and_(ContactDB.id == id, ContactDB.user_id == user.id)).first()
+        if contact:
+            self.db.delete(contact)
         self.db.commit()
-        return self.get_by_id(id)
+        return contact

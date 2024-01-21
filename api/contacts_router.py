@@ -2,22 +2,27 @@ from fastapi import APIRouter, Depends, status, Response
 from starlette.responses import JSONResponse
 
 from dependencies.database import get_db, SessionLocal
+from models.contacts import User
 from schemas.contacts import ContactCreate, ContactUpdate, ContactResponse
 from services.contacts import ContactService
+from services.auth import auth_service
 
 router = APIRouter()
 
 
 @router.get("/", response_model=list[ContactResponse], tags=["get"])
 def get_all_contacts(
-    limit: int = 10, offset: int = 0, db: SessionLocal = Depends(get_db)
+        limit: int = 10, offset: int = 0, db: SessionLocal = Depends(get_db),
+        current_user: User = Depends(auth_service.get_current_user),
 ):
-    return ContactService(db).get_all_contacts(limit=limit, offset=offset)
+    print(current_user.id)
+    return ContactService(db).get_all_contacts(limit=limit, offset=offset, user=current_user)
 
 
 @router.get("/{id:int}", response_model=ContactResponse, tags=["get"])
-def get_contact_by_id(id: int, db: SessionLocal = Depends(get_db)):
-    contact = ContactService(db).get_by_id(id)
+def get_contact_by_id(id: int, db: SessionLocal = Depends(get_db),
+                      current_user: User = Depends(auth_service.get_current_user)):
+    contact = ContactService(db).get_by_id(id, user=current_user)
     if not contact:
         return JSONResponse(
             content={"message": "not found"}, status_code=status.HTTP_204_NO_CONTENT
@@ -26,8 +31,9 @@ def get_contact_by_id(id: int, db: SessionLocal = Depends(get_db)):
 
 
 @router.get("/{name:str}", response_model=list[ContactResponse], tags=["get"])
-def get_contact_by_name(name: str, db: SessionLocal = Depends(get_db)):
-    contact = ContactService(db).get_by_name(name)
+def get_contact_by_name(name: str, db: SessionLocal = Depends(get_db),
+                        current_user: User = Depends(auth_service.get_current_user)):
+    contact = ContactService(db).get_by_name(name, user=current_user)
     if not contact:
         return JSONResponse(
             content={"message": "not found"}, status_code=status.HTTP_204_NO_CONTENT
@@ -36,8 +42,9 @@ def get_contact_by_name(name: str, db: SessionLocal = Depends(get_db)):
 
 
 @router.get("/email/{email:str}", response_model=ContactResponse, tags=["get"])
-def get_contact_by_email(email: str, db: SessionLocal = Depends(get_db)):
-    contact = ContactService(db).get_by_email(email)
+def get_contact_by_email(email: str, db: SessionLocal = Depends(get_db),
+                         current_user: User = Depends(auth_service.get_current_user)):
+    contact = ContactService(db).get_by_email(email, user=current_user)
     if not contact:
         return JSONResponse(
             content={"message": "not found"}, status_code=status.HTTP_204_NO_CONTENT
@@ -48,8 +55,9 @@ def get_contact_by_email(email: str, db: SessionLocal = Depends(get_db)):
 @router.get(
     "/lastname/{lastname:str}", response_model=list[ContactResponse], tags=["get"]
 )
-def get_contact_by_lastname(lastname: str, db: SessionLocal = Depends(get_db)):
-    contact = ContactService(db).get_by_lastname(lastname)
+def get_contact_by_lastname(lastname: str, db: SessionLocal = Depends(get_db),
+                            current_user: User = Depends(auth_service.get_current_user)):
+    contact = ContactService(db).get_by_lastname(lastname, user=current_user)
     if not contact:
         return JSONResponse(
             content={"message": "not found"}, status_code=status.HTTP_204_NO_CONTENT
@@ -58,8 +66,9 @@ def get_contact_by_lastname(lastname: str, db: SessionLocal = Depends(get_db)):
 
 
 @router.get("/api/birthdays", response_model=list[ContactResponse], tags=["get"])
-def get_by_birthdate(db: SessionLocal = Depends(get_db)):
-    contact = ContactService(db).get_by_birthdate()
+def get_by_birthdate(db: SessionLocal = Depends(get_db),
+                     current_user: User = Depends(auth_service.get_current_user)):
+    contact = ContactService(db).get_by_birthdate(current_user)
     if not contact:
         return []
     return contact
@@ -69,9 +78,7 @@ def get_by_birthdate(db: SessionLocal = Depends(get_db)):
 def create_contact(contact: ContactCreate, db: SessionLocal = Depends(get_db)):
     contact_service = ContactService(db)
     created_contact = contact_service.create(contact)
-    print("+++++++++++")
-    print(created_contact)
-    print("+++++++++++")
+
     response_contact = ContactResponse(
         id=created_contact.id,
         firstname=created_contact.firstname,
@@ -89,8 +96,9 @@ def update_contact(id: int, contact: ContactUpdate, db: SessionLocal = Depends(g
 
 
 @router.delete("/{id}")
-def delete_contact(id: int, db: SessionLocal = Depends(get_db)):
-    contact = ContactService(db).delete(id)
+def delete_contact(id: int, db: SessionLocal = Depends(get_db),
+                   current_user: User = Depends(auth_service.get_current_user)):
+    contact = ContactService(db).delete(id, user=current_user)
     return Response(
         content="contact is deleted",
         media_type="text/plain",

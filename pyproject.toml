@@ -14,6 +14,8 @@ psycopg2 = "^2.9.9"
 pydantic-extra-types = "^2.4.1"
 phonenumbers = "^8.13.27"
 faker = "^22.2.0"
+python-jose = "^3.3.0"
+passlib = {extras = ["bcrypt"], version = "^1.7.4"}
 
 
 [build-system]
