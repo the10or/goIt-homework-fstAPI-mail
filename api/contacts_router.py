@@ -75,9 +75,10 @@ def get_by_birthdate(db: SessionLocal = Depends(get_db),
 
 
 @router.post("/", response_model=ContactResponse)
-def create_contact(contact: ContactCreate, db: SessionLocal = Depends(get_db)):
+def create_contact(contact: ContactCreate, db: SessionLocal = Depends(get_db),
+                   current_user: User = Depends(auth_service.get_current_user)):
     contact_service = ContactService(db)
-    created_contact = contact_service.create(contact)
+    created_contact = contact_service.create(contact, user=current_user)
 
     response_contact = ContactResponse(
         id=created_contact.id,
@@ -91,8 +92,9 @@ def create_contact(contact: ContactCreate, db: SessionLocal = Depends(get_db)):
 
 
 @router.put("/{id}", response_model=ContactResponse)
-def update_contact(id: int, contact: ContactUpdate, db: SessionLocal = Depends(get_db)):
-    return ContactService(db).update(id, contact)
+def update_contact(id: int, contact: ContactUpdate, db: SessionLocal = Depends(get_db),
+                   current_user: User = Depends(auth_service.get_current_user)):
+    return ContactService(db).update(id, contact, user=current_user)
 
 
 @router.delete("/{id}")

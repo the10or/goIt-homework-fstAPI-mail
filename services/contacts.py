@@ -15,11 +15,11 @@ class ContactService:
     def get_by_id(self, id: int, user: User):
         return self.repository.get_by_id(id, user)
 
-    def create(self, contact):
-        return self.repository.create(contact)
+    def create(self, contact, user: User):
+        return self.repository.create(contact, user)
 
-    def update(self, id, contact):
-        return self.repository.update(id, contact)
+    def update(self, id, contact, user: User):
+        return self.repository.update(id, contact, user)
 
     def delete(self, id, user: User):
         return self.repository.delete(id, user)

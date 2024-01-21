@@ -23,7 +23,7 @@ async def signup(body: UserBase, db: Session = Depends(get_db)):
         )
     body.password = auth_service.get_password_hash(body.password)
     new_user = await repository_users.create_user(body, db)
-    return {"user": new_user, "detail": "User successfully created"}
+    return UserResponse.from_orm(new_user)
 
 
 @router.post("/login", response_model=TokenModel)

@@ -20,15 +20,19 @@ class ContactRepository:
     def get_by_id(self, id, user: User):
         return self.db.query(ContactDB).filter(and_(ContactDB.id == id, ContactDB.user_id == user.id)).first()
 
-    def create(self, contact):
+    def create(self, contact, user: User):
         new_contact = ContactDB(**contact.dict())
+        new_contact.user_id = user.id
         self.db.add(new_contact)
         self.db.commit()
         self.db.refresh(new_contact)
         return new_contact
 
-    def update(self, id, contact):
-        existing_contact = self.db.query(ContactDB).filter(ContactDB.id == id).first()
+    def update(self, id, contact, user: User):
+        existing_contact = (self.db.query(ContactDB).
+                            filter(and_(ContactDB.id == id,
+                                        ContactDB.user_id == user.id))
+                            .first())
 
         if existing_contact:
             for field, value in contact.dict().items():
