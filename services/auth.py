@@ -9,12 +9,13 @@ from starlette import status
 
 from dependencies.database import get_db
 from repository import users
+from config import SECRET_KEY, ALGORITHM
 
 
 class Auth:
     pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-    SECRET_KEY = "a37a1f748ee8ccf83878a3cec2bea9fa96d025e20fdeb613"
-    ALGORITHM = "HS256"
+    SECRET_KEY = SECRET_KEY
+    ALGORITHM = ALGORITHM
     oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/auth/login")
 
     def verify_password(self, plain_password, hashed_password):
@@ -81,7 +82,7 @@ class Auth:
             raise credentials_exception
         return user
 
-    def create_email_token(self, data:dict):
+    def create_email_token(self, data: dict):
         to_encode = data.copy()
         expire = datetime.utcnow() + timedelta(days=1)
         to_encode.update({"iat": datetime.utcnow(), "exp": expire})

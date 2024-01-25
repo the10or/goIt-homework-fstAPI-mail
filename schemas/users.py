@@ -6,7 +6,7 @@ class UserBase(BaseModel):
     password: str = Field(min_length=8)
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class UserResponse(BaseModel):
@@ -14,7 +14,6 @@ class UserResponse(BaseModel):
     email: EmailStr
 
     class Config:
-        orm_mode = True
         from_attributes = True
 
 
