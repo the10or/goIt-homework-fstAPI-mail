@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, status, Response
+from fastapi_limiter.depends import RateLimiter
 from starlette.responses import JSONResponse
 
 from dependencies.database import get_db, SessionLocal
@@ -74,7 +75,9 @@ def get_by_birthdate(db: SessionLocal = Depends(get_db),
     return contact
 
 
-@router.post("/", response_model=ContactResponse)
+@router.post("/", response_model=ContactResponse,
+             description="Create new contact, rate limit: 2 calls per minute",
+             dependencies=[Depends(RateLimiter(times=1, minutes=5))])
 def create_contact(contact: ContactCreate, db: SessionLocal = Depends(get_db),
                    current_user: User = Depends(auth_service.get_current_user)):
     contact_service = ContactService(db)

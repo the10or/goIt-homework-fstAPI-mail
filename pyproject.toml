@@ -17,6 +17,7 @@ faker = "^22.2.0"
 python-jose = "^3.3.0"
 passlib = {extras = ["bcrypt"], version = "^1.7.4"}
 fastapi-mail = "^1.4.1"
+fastapi-limiter = "^0.1.6"
 
 
 [build-system]

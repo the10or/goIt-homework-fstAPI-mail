@@ -14,3 +14,10 @@ services:
       - ./db_data:/var/lib/postgresql/data
 
 
+  redis:
+    image: redis
+    restart: always
+    ports:
+      - ${REDIS_PORT}:6379
+
+
