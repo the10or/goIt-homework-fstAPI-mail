@@ -4,6 +4,7 @@ from pydantic import BaseModel, Field, EmailStr
 class UserBase(BaseModel):
     email: EmailStr
     password: str = Field(min_length=8)
+    userpic: str|None = None
 
     class Config:
         from_attributes = True
@@ -25,3 +26,4 @@ class TokenModel(BaseModel):
 
 class RequestEmail(BaseModel):
     email: EmailStr
+

@@ -1,8 +1,10 @@
-from fastapi import APIRouter, status, Depends, HTTPException, Security, BackgroundTasks, Request
+from fastapi import APIRouter, status, Depends, HTTPException, Security, BackgroundTasks, Request, UploadFile
+from fastapi.params import File
 from fastapi.security import HTTPBearer, OAuth2PasswordRequestForm, HTTPAuthorizationCredentials
 from sqlalchemy.orm import Session
 
 from dependencies.database import get_db
+from dependencies.cloudinary_client import upload
 from repository import users as repository_users
 from schemas.users import UserResponse, UserBase, TokenModel, RequestEmail
 from models.contacts import User
@@ -102,3 +104,20 @@ async def request_email(body: RequestEmail, background_tasks: BackgroundTasks,
     if user:
         background_tasks.add_task(send_email, user.email, request.base_url)
     return {"message": "Check your email for confirmation"}
+
+
+@router.post('/upload_userpic')
+async def upload_userpic(file: UploadFile = File(...), uploader=Depends(upload),
+                         current_user=Depends(auth_service.get_current_user),
+                         db: Session = Depends(get_db)):
+    try:
+        content = file.file.read()
+        res = uploader.upload(content)
+        print(res['secure_url'])
+
+    except Exception:
+        return {"message": "Error uploading file"}
+    finally:
+        file.file.close()
+    await repository_users.set_userpic(userpic=res['secure_url'], user=current_user, db=db)
+    return {"message": f" File {file.filename} successfully uploaded"}

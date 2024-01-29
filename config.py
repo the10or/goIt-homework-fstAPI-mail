@@ -23,5 +23,12 @@ USE_CREDENTIALS = True
 VALIDATE_CERTS = True
 TEMPLATE_FOLDER = Path(__file__).parent / 'templates'
 
+REDIS_HOST = os.environ.get("REDIS_HOST")
+REDIS_PORT = os.environ.get("REDIS_PORT")
+
 SECRET_KEY = os.environ.get("SECRET_KEY")
 ALGORITHM = os.environ.get("ALGORITHM")
+
+CLOUDINARY_NAME = os.environ.get("CLOUD_NAME")
+CLOUDINARY_API_KEY = os.environ.get("API_KEY")
+CLOUDINARY_API_SECRET = os.environ.get("API_SECRET")

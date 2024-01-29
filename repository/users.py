@@ -4,6 +4,7 @@ from models.contacts import User
 from schemas.users import UserBase
 
 
+
 async def create_user(body: User, db: Session):
     new_user = User(**body.dict())
     db.add(new_user)
@@ -24,4 +25,10 @@ async def update_token(user: User, token: str | None, db):
 async def confirmed_email(email: str, db: Session):
     user = await get_user_by_email(email, db)
     user.confirmed = True
+    db.commit()
+
+
+async def set_userpic(userpic: str, db: Session, user: User):
+
+    user.userpic = userpic
     db.commit()

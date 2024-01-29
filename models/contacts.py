@@ -25,3 +25,4 @@ class User(Base):
     password = Column(String(255), nullable=False)
     refresh_token = Column(String(255), nullable=True)
     confirmed = Column(Boolean, default=False)
+    userpic = Column(String(255), nullable=True)
