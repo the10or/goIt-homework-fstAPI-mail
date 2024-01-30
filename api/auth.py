@@ -3,11 +3,11 @@ from fastapi.params import File
 from fastapi.security import HTTPBearer, OAuth2PasswordRequestForm, HTTPAuthorizationCredentials
 from sqlalchemy.orm import Session
 
-from dependencies.database import get_db
 from dependencies.cloudinary_client import upload
+from dependencies.database import get_db
+from models.contacts import User
 from repository import users as repository_users
 from schemas.users import UserResponse, UserBase, TokenModel, RequestEmail
-from models.contacts import User
 from services.auth import auth_service
 from services.email import send_email
 
@@ -22,6 +22,17 @@ async def signup(body: UserBase,
                  request: Request,
                  db: Session = Depends(get_db)
                  ):
+    """
+    Async function for user registration. Takes in user data and database session as parameters.
+
+    :param body: UserBase
+    :param background_tasks: BackgroundTasks
+    :param request: Request
+    :param db: Session
+    :return: returns success message
+
+
+    """
     exist_user = db.query(User).filter(User.email == body.email).first()
     if exist_user:
         raise HTTPException(
@@ -42,6 +53,16 @@ async def signup(body: UserBase,
 @router.post("/login", response_model=TokenModel)
 async def login(body: OAuth2PasswordRequestForm = Depends(),
                 db: Session = Depends(get_db)):
+    """
+    Async function for user login. Takes in user credentials and database session as parameters.
+
+
+    :param body: OAuth2PasswordRequestForm
+    :param db: Session
+    :return: returns access token and refresh token
+
+
+    """
     user = await repository_users.get_user_by_email(body.username, db)
     if user is None:
         raise HTTPException(
@@ -68,6 +89,16 @@ async def login(body: OAuth2PasswordRequestForm = Depends(),
 @router.get("/refresh_token", response_model=TokenModel)
 async def refresh_token(credentials: HTTPAuthorizationCredentials = Security(security),
                         db: Session = Depends(get_db)):
+    """
+    Async function for user refresh token. Takes in user credentials and database session as parameters.
+
+    :param credentials: HTTPAuthorizationCredentials
+    :param db: Session
+    :return: returns access token and refresh token
+
+
+    """
+
     token = credentials.credentials
     email = await auth_service.decode_refresh_token(token)
     user = await repository_users.get_user_by_email(email, db)
@@ -83,6 +114,15 @@ async def refresh_token(credentials: HTTPAuthorizationCredentials = Security(sec
 
 @router.get("/confirmed_email/{token}")
 async def confirmed_email(token: str, db: Session = Depends(get_db)):
+    """
+    Async function for confirmed email. Takes in user credentials and database session as parameters.
+
+    :param token: str
+    :param db: Session
+    :return: json with success message
+
+
+    """
     email = auth_service.get_email_from_token(token)
     user = await repository_users.get_user_by_email(email, db)
     if user is None:
@@ -97,6 +137,17 @@ async def confirmed_email(token: str, db: Session = Depends(get_db)):
 @router.post('/request_email')
 async def request_email(body: RequestEmail, background_tasks: BackgroundTasks,
                         request: Request, db: Session = Depends(get_db)):
+    """
+    Async function for request email. Takes in user credentials and database session as parameters.
+
+    :param body: RequestEmail
+    :param background_tasks: BackgroundTasks
+    :param request: Request
+    :param db: Session
+    :return: json with success message
+
+    """
+
     user = await repository_users.get_user_by_email(body.email, db)
 
     if user.confirmed:
@@ -110,6 +161,16 @@ async def request_email(body: RequestEmail, background_tasks: BackgroundTasks,
 async def upload_userpic(file: UploadFile = File(...), uploader=Depends(upload),
                          current_user=Depends(auth_service.get_current_user),
                          db: Session = Depends(get_db)):
+    """
+    Async function for upload userpic. Takes in user credentials and database session as parameters.
+
+    :param file: UploadFile
+    :param uploader: Depends(upload)
+    :param current_user: Depends(get_current_user)
+    :param db: Session
+    :return: json with success message
+
+    """
     try:
         content = file.file.read()
         res = uploader.upload(content)

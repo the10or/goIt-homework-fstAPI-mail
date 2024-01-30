@@ -5,8 +5,8 @@ from starlette.responses import JSONResponse
 from dependencies.database import get_db, SessionLocal
 from models.contacts import User
 from schemas.contacts import ContactCreate, ContactUpdate, ContactResponse
-from services.contacts import ContactService
 from services.auth import auth_service
+from services.contacts import ContactService
 
 router = APIRouter()
 

@@ -1,11 +1,9 @@
-from pathlib import Path
-
 from fastapi_mail import FastMail, MessageSchema, ConnectionConfig, MessageType
 from fastapi_mail.errors import ConnectionErrors
 from pydantic import EmailStr
+
 from config import (MAIL_USERNAME, MAIL_PASSWORD, MAIL_FROM,
                     MAIL_PORT, MAIL_SERVER, MAIL_FROM_NAME, TEMPLATE_FOLDER)
-
 from services.auth import auth_service
 
 conf = ConnectionConfig(
@@ -24,6 +22,15 @@ conf = ConnectionConfig(
 
 
 async def send_email(email: EmailStr, host: str):
+
+    """
+    A method for sending email with verification token
+
+    :param email: (EmailStr) email for verification
+    :param host: (str) host for verification
+    :return:  None
+    :raises: ConnectionErrors if failed to send email with verification token
+    """
     try:
         token_verification = auth_service.create_email_token({"sub": email})
         message = MessageSchema(

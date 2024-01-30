@@ -1,13 +1,13 @@
 import redis.asyncio as redis
 from fastapi import FastAPI
-from fastapi_limiter import FastAPILimiter
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi_limiter import FastAPILimiter
 
-from api.contacts_router import router as contacts_router
 from api.auth import router as auth_router
+from api.contacts_router import router as contacts_router
+from config import REDIS_HOST, REDIS_PORT
 from dependencies.database import engine
 from models import contacts
-from config import REDIS_HOST, REDIS_PORT
 
 contacts.Base.metadata.create_all(bind=engine)
 
@@ -30,6 +30,7 @@ app.include_router(auth_router, prefix="/api", tags=["auth"])
 
 @app.on_event("startup")
 async def startup():
+
     r = await redis.Redis(host=REDIS_HOST, port=REDIS_PORT, db=0, encoding="utf-8", decode_responses=True)
     await FastAPILimiter.init(r)
 
