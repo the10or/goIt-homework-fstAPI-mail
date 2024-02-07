@@ -11,12 +11,12 @@ class ContactDB(Base):
 
     Has one-to-many relationship with User
 
-    :param id: (integer) primary key
-    :param firstname: (string) first name
-    :param lastname: (string) last name
-    :param email: (string) email
-    :param phone: (string) phone number
-    :param birthdate: (date)  birthdate
+    :param id: id of contact
+    :param firstname: (string) first name of contact
+    :param lastname: (string) last name of contact
+    :param email: (string) email of contact
+    :param phone: (string) phone number of contact
+    :param birthdate: (date)  birthdate of contact
     :param user_id: (integer) foreign key to users table
     :param user: one-to-many relationship with User
 

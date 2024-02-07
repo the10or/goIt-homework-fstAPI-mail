@@ -27,6 +27,10 @@ class ContactBase(BaseModel):
 
 
 class ContactCreate(ContactBase):
+    """
+    Pydantic schema for creating contacts table
+    inherits from ContactBase
+    """
     pass
 
 
@@ -51,8 +55,9 @@ class ContactUpdate(BaseModel):
 class ContactResponse(ContactBase):
     """
     Pydantic schema for contacts table response
+    inherits from ContactBase
 
-    :param id: (int) primary key
+    :param id: primary key of contact
     """
     id: int
 

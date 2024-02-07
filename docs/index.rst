@@ -62,7 +62,7 @@ REST API MODELS
 REST API repository CONTACTS
 ============================
 
-.. automodule:: repository.contacts
+.. autoclass:: repository.contacts.ContactRepository
    :members:
    :undoc-members:
    :show-inheritance:

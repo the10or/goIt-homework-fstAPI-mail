@@ -24,7 +24,7 @@ class UserResponse(BaseModel):
     Pydantic schema for users table response
 
     :param id: (integer) primary key
-    :param email: (EmailStr) email
+    :param email: (EmailStr) email of user
     """
     id: int
     email: EmailStr
@@ -37,8 +37,8 @@ class TokenModel(BaseModel):
     """
     Pydantic schema for JWT access and refresh token
 
-    access_token: str
-    refresh_token: str
+    access_token: JWT token generated for user login
+    refresh_token: JWT token generated for user refresh in case of invalid access token
     token_type: str = "bearer"
 
     """

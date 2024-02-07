@@ -7,9 +7,9 @@ async def create_user(body: User, db: Session):
     """
     A method for creating new user in database.
 
-    :param body: User
-    :param db: Session
-    :return: User
+    :param body: data of new user
+    :param db: database session
+    :return: new user
     """
 
     new_user = User(**body.dict())
@@ -23,9 +23,9 @@ async def get_user_by_email(email: str, db: Session):
     """
     A method for getting user by email from database.
 
-    :param email: str
-    :param db: Session
-    :return: User
+    :param email: user email
+    :param db: database session
+    :return: found user
     """
     return db.query(User).filter(User.email == email).first()
 
@@ -34,9 +34,9 @@ async def update_token(user: User, token: str | None, db: Session):
     """
     A method for updating user token in database.
 
-    :param user: User
-    :param token: str | None
-    :param db: Session
+    :param user: user owning token
+    :param token: token to be updated
+    :param db: database session
     :return: None
     """
     user.refresh_token = token
@@ -47,8 +47,8 @@ async def confirmed_email(email: str, db: Session):
     """
     A method for confirming user email.
 
-    :param email: str
-    :param db: Session
+    :param email: email of user that need to be confirmed
+    :param db: database session
     :return: None
     """
     user = await get_user_by_email(email, db)
@@ -59,9 +59,9 @@ async def confirmed_email(email: str, db: Session):
 async def set_userpic(userpic: str, db: Session, user: User):
     """
     A method for setting userpic.
-    :param userpic: str
-    :param db: Session
-    :param user: User
+    :param userpic: address of userpic
+    :param db: database session
+    :param user: current user
     :return: None
     """
     user.userpic = userpic

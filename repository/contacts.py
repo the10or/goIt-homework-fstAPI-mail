@@ -12,28 +12,22 @@ class ContactRepository:
         """
         A method for getting all contacts for current user.
 
-
-        :param limit: int
-        :param offset: int
-        :param user: User
-        :return: list
+        :param limit: number of contacts on one page
+        :param offset: number of skipped contacts
+        :param user: current user
+        :return: list of contacts
         """
 
         return (
-            self.db.query(ContactDB)
-            .filter(ContactDB.user_id == user.id)
-            .order_by(ContactDB.id)
-            .limit(limit)
-            .offset(offset)
-            .all()
-        )
+            self.db.query(ContactDB).filter(ContactDB.user_id == user.id).order_by(ContactDB.id).limit(limit).offset(
+                offset).all())
 
     def get_by_id(self, id: int, user: User):
         """
         A method for getting contact by id.
-        :param id: int
-        :param user: User
-        :return: ContactDB
+        :param id: id of contact
+        :param user: current user
+        :return: contact data by id
         """
         return self.db.query(ContactDB).filter(and_(ContactDB.id == id, ContactDB.user_id == user.id)).first()
 
@@ -41,9 +35,9 @@ class ContactRepository:
         """
         A method for creating new contact.
 
-        :param contact: ContactDB
-        :param user: User
-        :return: ContactDB
+        :param contact: contact data
+        :param user: current user
+        :return: new contact data
         """
         new_contact = ContactDB(**contact.dict())
         new_contact.user_id = user.id
@@ -56,15 +50,13 @@ class ContactRepository:
         """
         A method for updating contact.
 
-        :param id: int
-        :param contact: ContactDB
-        :param user: User
-        :return: ContactDB
+        :param id: id of contact
+        :param contact: contact data
+        :param user: current user
+        :return: updated contact data
         """
-        existing_contact = (self.db.query(ContactDB).
-                            filter(and_(ContactDB.id == id,
-                                        ContactDB.user_id == user.id))
-                            .first())
+        existing_contact = (
+            self.db.query(ContactDB).filter(and_(ContactDB.id == id, ContactDB.user_id == user.id)).first())
 
         if existing_contact:
             for field, value in contact.dict().items():
@@ -79,9 +71,9 @@ class ContactRepository:
         """
         A method for getting contact by name.
 
-        :param name: str
-        :param user: User
-        :return: ContactDB
+        :param name: firstname of searched contact
+        :param user: current user
+        :return: list of found contacts
         """
         return self.db.query(ContactDB).filter(and_(ContactDB.firstname == name, ContactDB.user_id == user.id)).all()
 
@@ -89,9 +81,9 @@ class ContactRepository:
         """
         A method for getting contact by email.
 
-        :param email: str
-        :param user: User
-        :return: ContactDB
+        :param email: email of searched contact
+        :param user: current user
+        :return: contact with given email
         """
         return self.db.query(ContactDB).filter((ContactDB.email == email, ContactDB.user_id == user.id)).first()
 
@@ -99,9 +91,9 @@ class ContactRepository:
         """
         A method for getting contact by lastname.
 
-        :param lastname: str
-        :param user: User
-        :return: ContactDB
+        :param lastname: lastname of searched contact
+        :param user: current user
+        :return: list of found contacts
         """
         return self.db.query(ContactDB).filter(and_(ContactDB.lastname == lastname, ContactDB.user_id == user.id)).all()
 
@@ -110,41 +102,17 @@ class ContactRepository:
         """
         A method for getting contacts by birthdate.
 
-        :param today:
-        :param next_week:
-        :param year_to_change:
-        :param user:
-        :return:
+        :param today: current date
+        :param next_week: date of next week
+        :param year_to_change: year needed to be changed in birthdate
+        :param user: current user
+        :return: list of found contacts
         """
-        contacts = (
-            self.db.query(ContactDB)
-            .filter(
-                and_(
-                    func.date(
-                        func.concat(
-                            year_to_change,
-                            "-",
-                            extract("month", ContactDB.birthdate),
-                            "-",
-                            extract("day", ContactDB.birthdate),
-                        )
-                    )
-                    >= today,
-                    func.date(
-                        func.concat(
-                            year_to_change,
-                            "-",
-                            extract("month", ContactDB.birthdate),
-                            "-",
-                            extract("day", ContactDB.birthdate),
-                        )
-                    )
-                    <= next_week,
-                    ContactDB.user_id == user.id,
-                )
-            )
-            .all()
-        )
+        contacts = (self.db.query(ContactDB).filter(and_(func.date(
+            func.concat(year_to_change, "-", extract("month", ContactDB.birthdate), "-",
+                extract("day", ContactDB.birthdate), )) >= today, func.date(
+            func.concat(year_to_change, "-", extract("month", ContactDB.birthdate), "-",
+                extract("day", ContactDB.birthdate), )) <= next_week, ContactDB.user_id == user.id, )).all())
 
         return contacts
 
@@ -152,9 +120,9 @@ class ContactRepository:
         """
         A method for deleting contact.
 
-        :param id:
-        :param user:
-        :return:
+        :param id: id of contact to be deleted
+        :param user: current user
+        :return: deleted contact
         """
         contact = self.db.query(ContactDB).filter(and_(ContactDB.id == id, ContactDB.user_id == user.id)).first()
         if contact:

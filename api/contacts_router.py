@@ -15,7 +15,17 @@ router = APIRouter()
 def get_all_contacts(
         limit: int = 10, offset: int = 0, db: SessionLocal = Depends(get_db),
         current_user: User = Depends(auth_service.get_current_user),
-):
+
+) -> list[ContactResponse]:
+    """
+    Async function for get all contacts. Takes in user credentials and database session as parameters.
+
+    :param limit: the number of contacts to show on one page
+    :param offset: the number of contacts to skip
+    :param db: database session
+    :param current_user: logged in user
+    :return: the list of contacts
+    """
     print(current_user.id)
     return ContactService(db).get_all_contacts(limit=limit, offset=offset, user=current_user)
 
@@ -23,6 +33,14 @@ def get_all_contacts(
 @router.get("/{id:int}", response_model=ContactResponse, tags=["get"])
 def get_contact_by_id(id: int, db: SessionLocal = Depends(get_db),
                       current_user: User = Depends(auth_service.get_current_user)):
+    """
+    Async function for get contact by id. Takes in user credentials and database session as parameters.
+
+    :param id: id of contact
+    :param db: database session
+    :param current_user: logged in user
+    :return: contact data
+    """
     contact = ContactService(db).get_by_id(id, user=current_user)
     if not contact:
         return JSONResponse(
@@ -34,6 +52,15 @@ def get_contact_by_id(id: int, db: SessionLocal = Depends(get_db),
 @router.get("/{name:str}", response_model=list[ContactResponse], tags=["get"])
 def get_contact_by_name(name: str, db: SessionLocal = Depends(get_db),
                         current_user: User = Depends(auth_service.get_current_user)):
+    """
+    Async function for get contact by name. Takes in user credentials and database session as parameters.
+    returns list[ContactResponse]
+
+    :param name: name of contact
+    :param db: database session
+    :param current_user: logged in user
+    :return: list of contacts with given name
+    """
     contact = ContactService(db).get_by_name(name, user=current_user)
     if not contact:
         return JSONResponse(
@@ -45,6 +72,15 @@ def get_contact_by_name(name: str, db: SessionLocal = Depends(get_db),
 @router.get("/email/{email:str}", response_model=ContactResponse, tags=["get"])
 def get_contact_by_email(email: str, db: SessionLocal = Depends(get_db),
                          current_user: User = Depends(auth_service.get_current_user)):
+    """
+    Async function for get contact by email. Takes in user credentials and database session as parameters.
+    returns ContactResponse
+
+    :param email: email of contact
+    :param db: database session
+    :param current_user: logged in user
+    :return: contact with given email
+    """
     contact = ContactService(db).get_by_email(email, user=current_user)
     if not contact:
         return JSONResponse(
@@ -58,6 +94,14 @@ def get_contact_by_email(email: str, db: SessionLocal = Depends(get_db),
 )
 def get_contact_by_lastname(lastname: str, db: SessionLocal = Depends(get_db),
                             current_user: User = Depends(auth_service.get_current_user)):
+    """
+    Async function for get contact by lastname. Takes in user credentials and database session as parameters.
+
+    :param lastname: lastname of contact
+    :param db: database session
+    :param current_user: logged in user
+    :return: list of contacts with given lastname
+    """
     contact = ContactService(db).get_by_lastname(lastname, user=current_user)
     if not contact:
         return JSONResponse(
@@ -69,6 +113,13 @@ def get_contact_by_lastname(lastname: str, db: SessionLocal = Depends(get_db),
 @router.get("/api/birthdays", response_model=list[ContactResponse], tags=["get"])
 def get_by_birthdate(db: SessionLocal = Depends(get_db),
                      current_user: User = Depends(auth_service.get_current_user)):
+    """
+    Async function for get all contacts. Takes in user credentials and database session as parameters.
+
+    :param db: database session
+    :param current_user: logged in user
+    :return: list of contacts with birthday in the next 7 days
+    """
     contact = ContactService(db).get_by_birthdate(current_user)
     if not contact:
         return []
@@ -80,6 +131,14 @@ def get_by_birthdate(db: SessionLocal = Depends(get_db),
              dependencies=[Depends(RateLimiter(times=1, minutes=5))])
 def create_contact(contact: ContactCreate, db: SessionLocal = Depends(get_db),
                    current_user: User = Depends(auth_service.get_current_user)):
+    """
+    Async function for create new contact. Takes in user credentials and database session as parameters.
+
+    :param contact: contact data
+    :param db: database session
+    :param current_user: logged in user
+    :return: created contact
+    """
     contact_service = ContactService(db)
     created_contact = contact_service.create(contact, user=current_user)
 
@@ -97,12 +156,29 @@ def create_contact(contact: ContactCreate, db: SessionLocal = Depends(get_db),
 @router.put("/{id}", response_model=ContactResponse)
 def update_contact(id: int, contact: ContactUpdate, db: SessionLocal = Depends(get_db),
                    current_user: User = Depends(auth_service.get_current_user)):
+    """
+    Async function for update contact. Takes in user credentials and database session as parameters.
+
+    :param id: id of contact
+    :param contact: updated contact
+    :param db: database session
+    :param current_user: logged in user
+    :return:  updated contact
+    """
     return ContactService(db).update(id, contact, user=current_user)
 
 
 @router.delete("/{id}")
 def delete_contact(id: int, db: SessionLocal = Depends(get_db),
                    current_user: User = Depends(auth_service.get_current_user)):
+    """
+    Async function for delete contact. Takes in user credentials and database session as parameters.
+
+    :param id: id of contact to delete
+    :param db: database session
+    :param current_user: logged in user
+    :return: response with success message
+    """
     contact = ContactService(db).delete(id, user=current_user)
     return Response(
         content="contact is deleted",

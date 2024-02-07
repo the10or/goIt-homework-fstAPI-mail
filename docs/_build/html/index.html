@@ -43,18 +43,8 @@ contain the root <cite>toctree</cite> directive.</p>
 <div class="toctree-wrapper compound">
 </div>
 </section>
-<section id="module-main">
-<span id="rest-api-main"></span><h1>REST API main<a class="headerlink" href="#module-main" title="Link to this heading">¶</a></h1>
-<dl class="py function">
-<dt class="sig sig-object py" id="main.health_check">
-<span class="sig-prename descclassname"><span class="pre">main.</span></span><span class="sig-name descname"><span class="pre">health_check</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#main.health_check" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="main.startup">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">main.</span></span><span class="sig-name descname"><span class="pre">startup</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#main.startup" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
+<section id="rest-api-main">
+<h1>REST API main<a class="headerlink" href="#rest-api-main" title="Link to this heading">¶</a></h1>
 </section>
 <section id="rest-api-routes-auth">
 <h1>REST API routes Auth<a class="headerlink" href="#rest-api-routes-auth" title="Link to this heading">¶</a></h1>
@@ -65,8 +55,8 @@ contain the root <cite>toctree</cite> directive.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>token</strong> – str</p></li>
-<li><p><strong>db</strong> – Session</p></li>
+<li><p><strong>token</strong> – token from email</p></li>
+<li><p><strong>db</strong> – database session</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -87,7 +77,7 @@ contain the root <cite>toctree</cite> directive.</p>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>returns access token and refresh token</p>
+<dd class="field-even"><p>access token and refresh token</p>
 </dd>
 </dl>
 </dd></dl>
@@ -100,11 +90,11 @@ contain the root <cite>toctree</cite> directive.</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>credentials</strong> – HTTPAuthorizationCredentials</p></li>
-<li><p><strong>db</strong> – Session</p></li>
+<li><p><strong>db</strong> – database session</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>returns access token and refresh token</p>
+<dd class="field-even"><p>access token and refresh token</p>
 </dd>
 </dl>
 </dd></dl>
@@ -116,10 +106,10 @@ contain the root <cite>toctree</cite> directive.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>body</strong> – RequestEmail</p></li>
-<li><p><strong>background_tasks</strong> – BackgroundTasks</p></li>
-<li><p><strong>request</strong> – Request</p></li>
-<li><p><strong>db</strong> – Session</p></li>
+<li><p><strong>body</strong> – email of user</p></li>
+<li><p><strong>background_tasks</strong> – task for sending email</p></li>
+<li><p><strong>request</strong> – request from email</p></li>
+<li><p><strong>db</strong> – database session</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -154,10 +144,10 @@ contain the root <cite>toctree</cite> directive.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>file</strong> – UploadFile</p></li>
-<li><p><strong>uploader</strong> – Depends(upload)</p></li>
-<li><p><strong>current_user</strong> – Depends(get_current_user)</p></li>
-<li><p><strong>db</strong> – Session</p></li>
+<li><p><strong>file</strong> – file from user</p></li>
+<li><p><strong>uploader</strong> – cloudinary uploader</p></li>
+<li><p><strong>current_user</strong> – logged in user</p></li>
+<li><p><strong>db</strong> – database session</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -172,47 +162,167 @@ contain the root <cite>toctree</cite> directive.</p>
 <dl class="py function" id="module-api.contacts_router">
 <dt class="sig sig-object py" id="api.contacts_router.create_contact">
 <span class="sig-prename descclassname"><span class="pre">api.contacts_router.</span></span><span class="sig-name descname"><span class="pre">create_contact</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">contact:</span> <span class="pre">~schemas.contacts.ContactCreate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db:</span> <span class="pre">sessionmaker(class_='Session'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">autocommit=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bind=Engine(postgresql+psycopg2://postgres:***&#64;localhost:5432/contacts)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">autoflush=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expire_on_commit=True)</span> <span class="pre">=</span> <span class="pre">Depends(get_db)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_user:</span> <span class="pre">~models.contacts.User</span> <span class="pre">=</span> <span class="pre">Depends(get_current_user)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#api.contacts_router.create_contact" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Async function for create new contact. Takes in user credentials and database session as parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>contact</strong> – contact data</p></li>
+<li><p><strong>db</strong> – database session</p></li>
+<li><p><strong>current_user</strong> – logged in user</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>created contact</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="api.contacts_router.delete_contact">
 <span class="sig-prename descclassname"><span class="pre">api.contacts_router.</span></span><span class="sig-name descname"><span class="pre">delete_contact</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id:</span> <span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db:</span> <span class="pre">sessionmaker(class_='Session'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">autocommit=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bind=Engine(postgresql+psycopg2://postgres:***&#64;localhost:5432/contacts)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">autoflush=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expire_on_commit=True)</span> <span class="pre">=</span> <span class="pre">Depends(get_db)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_user:</span> <span class="pre">~models.contacts.User</span> <span class="pre">=</span> <span class="pre">Depends(get_current_user)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#api.contacts_router.delete_contact" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Async function for delete contact. Takes in user credentials and database session as parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – id of contact to delete</p></li>
+<li><p><strong>db</strong> – database session</p></li>
+<li><p><strong>current_user</strong> – logged in user</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>response with success message</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="api.contacts_router.get_all_contacts">
-<span class="sig-prename descclassname"><span class="pre">api.contacts_router.</span></span><span class="sig-name descname"><span class="pre">get_all_contacts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">limit:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db:</span> <span class="pre">sessionmaker(class_='Session'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">autocommit=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bind=Engine(postgresql+psycopg2://postgres:***&#64;localhost:5432/contacts)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">autoflush=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expire_on_commit=True)</span> <span class="pre">=</span> <span class="pre">Depends(get_db)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_user:</span> <span class="pre">~models.contacts.User</span> <span class="pre">=</span> <span class="pre">Depends(get_current_user)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#api.contacts_router.get_all_contacts" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<span class="sig-prename descclassname"><span class="pre">api.contacts_router.</span></span><span class="sig-name descname"><span class="pre">get_all_contacts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">limit:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db:</span> <span class="pre">sessionmaker(class_='Session'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">autocommit=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bind=Engine(postgresql+psycopg2://postgres:***&#64;localhost:5432/contacts)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">autoflush=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expire_on_commit=True)</span> <span class="pre">=</span> <span class="pre">Depends(get_db)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_user:</span> <span class="pre">~models.contacts.User</span> <span class="pre">=</span> <span class="pre">Depends(get_current_user)</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#schemas.contacts.ContactResponse" title="schemas.contacts.ContactResponse"><span class="pre">ContactResponse</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#api.contacts_router.get_all_contacts" title="Link to this definition">¶</a></dt>
+<dd><p>Async function for get all contacts. Takes in user credentials and database session as parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>limit</strong> – the number of contacts to show on one page</p></li>
+<li><p><strong>offset</strong> – the number of contacts to skip</p></li>
+<li><p><strong>db</strong> – database session</p></li>
+<li><p><strong>current_user</strong> – logged in user</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the list of contacts</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="api.contacts_router.get_by_birthdate">
 <span class="sig-prename descclassname"><span class="pre">api.contacts_router.</span></span><span class="sig-name descname"><span class="pre">get_by_birthdate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">db:</span> <span class="pre">sessionmaker(class_='Session'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">autocommit=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bind=Engine(postgresql+psycopg2://postgres:***&#64;localhost:5432/contacts)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">autoflush=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expire_on_commit=True)</span> <span class="pre">=</span> <span class="pre">Depends(get_db)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_user:</span> <span class="pre">~models.contacts.User</span> <span class="pre">=</span> <span class="pre">Depends(get_current_user)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#api.contacts_router.get_by_birthdate" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Async function for get all contacts. Takes in user credentials and database session as parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>db</strong> – database session</p></li>
+<li><p><strong>current_user</strong> – logged in user</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>list of contacts with birthday in the next 7 days</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="api.contacts_router.get_contact_by_email">
 <span class="sig-prename descclassname"><span class="pre">api.contacts_router.</span></span><span class="sig-name descname"><span class="pre">get_contact_by_email</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">email:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db:</span> <span class="pre">sessionmaker(class_='Session'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">autocommit=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bind=Engine(postgresql+psycopg2://postgres:***&#64;localhost:5432/contacts)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">autoflush=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expire_on_commit=True)</span> <span class="pre">=</span> <span class="pre">Depends(get_db)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_user:</span> <span class="pre">~models.contacts.User</span> <span class="pre">=</span> <span class="pre">Depends(get_current_user)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#api.contacts_router.get_contact_by_email" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Async function for get contact by email. Takes in user credentials and database session as parameters.
+returns ContactResponse</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>email</strong> – email of contact</p></li>
+<li><p><strong>db</strong> – database session</p></li>
+<li><p><strong>current_user</strong> – logged in user</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>contact with given email</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="api.contacts_router.get_contact_by_id">
 <span class="sig-prename descclassname"><span class="pre">api.contacts_router.</span></span><span class="sig-name descname"><span class="pre">get_contact_by_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id:</span> <span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db:</span> <span class="pre">sessionmaker(class_='Session'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">autocommit=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bind=Engine(postgresql+psycopg2://postgres:***&#64;localhost:5432/contacts)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">autoflush=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expire_on_commit=True)</span> <span class="pre">=</span> <span class="pre">Depends(get_db)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_user:</span> <span class="pre">~models.contacts.User</span> <span class="pre">=</span> <span class="pre">Depends(get_current_user)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#api.contacts_router.get_contact_by_id" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Async function for get contact by id. Takes in user credentials and database session as parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – id of contact</p></li>
+<li><p><strong>db</strong> – database session</p></li>
+<li><p><strong>current_user</strong> – logged in user</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>contact data</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="api.contacts_router.get_contact_by_lastname">
 <span class="sig-prename descclassname"><span class="pre">api.contacts_router.</span></span><span class="sig-name descname"><span class="pre">get_contact_by_lastname</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lastname:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db:</span> <span class="pre">sessionmaker(class_='Session'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">autocommit=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bind=Engine(postgresql+psycopg2://postgres:***&#64;localhost:5432/contacts)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">autoflush=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expire_on_commit=True)</span> <span class="pre">=</span> <span class="pre">Depends(get_db)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_user:</span> <span class="pre">~models.contacts.User</span> <span class="pre">=</span> <span class="pre">Depends(get_current_user)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#api.contacts_router.get_contact_by_lastname" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Async function for get contact by lastname. Takes in user credentials and database session as parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lastname</strong> – lastname of contact</p></li>
+<li><p><strong>db</strong> – database session</p></li>
+<li><p><strong>current_user</strong> – logged in user</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>list of contacts with given lastname</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="api.contacts_router.get_contact_by_name">
 <span class="sig-prename descclassname"><span class="pre">api.contacts_router.</span></span><span class="sig-name descname"><span class="pre">get_contact_by_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db:</span> <span class="pre">sessionmaker(class_='Session'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">autocommit=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bind=Engine(postgresql+psycopg2://postgres:***&#64;localhost:5432/contacts)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">autoflush=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expire_on_commit=True)</span> <span class="pre">=</span> <span class="pre">Depends(get_db)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_user:</span> <span class="pre">~models.contacts.User</span> <span class="pre">=</span> <span class="pre">Depends(get_current_user)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#api.contacts_router.get_contact_by_name" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Async function for get contact by name. Takes in user credentials and database session as parameters.
+returns list[ContactResponse]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> – name of contact</p></li>
+<li><p><strong>db</strong> – database session</p></li>
+<li><p><strong>current_user</strong> – logged in user</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>list of contacts with given name</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="api.contacts_router.update_contact">
 <span class="sig-prename descclassname"><span class="pre">api.contacts_router.</span></span><span class="sig-name descname"><span class="pre">update_contact</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id:</span> <span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contact:</span> <span class="pre">~schemas.contacts.ContactUpdate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db:</span> <span class="pre">sessionmaker(class_='Session'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">autocommit=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bind=Engine(postgresql+psycopg2://postgres:***&#64;localhost:5432/contacts)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">autoflush=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expire_on_commit=True)</span> <span class="pre">=</span> <span class="pre">Depends(get_db)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_user:</span> <span class="pre">~models.contacts.User</span> <span class="pre">=</span> <span class="pre">Depends(get_current_user)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#api.contacts_router.update_contact" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Async function for update contact. Takes in user credentials and database session as parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – id of contact</p></li>
+<li><p><strong>contact</strong> – updated contact</p></li>
+<li><p><strong>db</strong> – database session</p></li>
+<li><p><strong>current_user</strong> – logged in user</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>updated contact</p>
+</dd>
+</dl>
+</dd></dl>
 
 </section>
 <section id="module-dependencies.cloudinary_client">
@@ -220,7 +330,9 @@ contain the root <cite>toctree</cite> directive.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="dependencies.cloudinary_client.upload">
 <span class="sig-prename descclassname"><span class="pre">dependencies.cloudinary_client.</span></span><span class="sig-name descname"><span class="pre">upload</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dependencies.cloudinary_client.upload" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>function for upload userpic
+:return: uploader for cloudinary</p>
+</dd></dl>
 
 </section>
 <section id="module-dependencies.database">
@@ -228,7 +340,9 @@ contain the root <cite>toctree</cite> directive.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="dependencies.database.get_db">
 <span class="sig-prename descclassname"><span class="pre">dependencies.database.</span></span><span class="sig-name descname"><span class="pre">get_db</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dependencies.database.get_db" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Get database session
+:return: database session</p>
+</dd></dl>
 
 </section>
 <section id="module-models.contacts">
@@ -243,12 +357,12 @@ inherits from Base class from sqlalchemy</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>id</strong> – (integer) primary key</p></li>
-<li><p><strong>firstname</strong> – (string) first name</p></li>
-<li><p><strong>lastname</strong> – (string) last name</p></li>
-<li><p><strong>email</strong> – (string) email</p></li>
-<li><p><strong>phone</strong> – (string) phone number</p></li>
-<li><p><strong>birthdate</strong> – (date)  birthdate</p></li>
+<li><p><strong>id</strong> – id of contact</p></li>
+<li><p><strong>firstname</strong> – (string) first name of contact</p></li>
+<li><p><strong>lastname</strong> – (string) last name of contact</p></li>
+<li><p><strong>email</strong> – (string) email of contact</p></li>
+<li><p><strong>phone</strong> – (string) phone number of contact</p></li>
+<li><p><strong>birthdate</strong> – (date)  birthdate of contact</p></li>
 <li><p><strong>user_id</strong> – (integer) foreign key to users table</p></li>
 <li><p><strong>user</strong> – one-to-many relationship with User</p></li>
 </ul>
@@ -349,8 +463,8 @@ inherits from Base class from sqlalchemy</p>
 </dd></dl>
 
 </section>
-<section id="module-repository.contacts">
-<span id="rest-api-repository-contacts"></span><h1>REST API repository CONTACTS<a class="headerlink" href="#module-repository.contacts" title="Link to this heading">¶</a></h1>
+<section id="rest-api-repository-contacts">
+<h1>REST API repository CONTACTS<a class="headerlink" href="#rest-api-repository-contacts" title="Link to this heading">¶</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="repository.contacts.ContactRepository">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">repository.contacts.</span></span><span class="sig-name descname"><span class="pre">ContactRepository</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">db</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#repository.contacts.ContactRepository" title="Link to this definition">¶</a></dt>
@@ -362,12 +476,12 @@ inherits from Base class from sqlalchemy</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>contact</strong> – ContactDB</p></li>
-<li><p><strong>user</strong> – User</p></li>
+<li><p><strong>contact</strong> – contact data</p></li>
+<li><p><strong>user</strong> – current user</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>ContactDB</p>
+<dd class="field-even"><p>new contact data</p>
 </dd>
 </dl>
 </dd></dl>
@@ -379,12 +493,12 @@ inherits from Base class from sqlalchemy</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>id</strong> – </p></li>
-<li><p><strong>user</strong> – </p></li>
+<li><p><strong>id</strong> – id of contact to be deleted</p></li>
+<li><p><strong>user</strong> – current user</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p></p>
+<dd class="field-even"><p>deleted contact</p>
 </dd>
 </dl>
 </dd></dl>
@@ -396,13 +510,13 @@ inherits from Base class from sqlalchemy</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>limit</strong> – int</p></li>
-<li><p><strong>offset</strong> – int</p></li>
-<li><p><strong>user</strong> – User</p></li>
+<li><p><strong>limit</strong> – number of contacts on one page</p></li>
+<li><p><strong>offset</strong> – number of skipped contacts</p></li>
+<li><p><strong>user</strong> – current user</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>list</p>
+<dd class="field-even"><p>list of contacts</p>
 </dd>
 </dl>
 </dd></dl>
@@ -414,14 +528,14 @@ inherits from Base class from sqlalchemy</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>today</strong> – </p></li>
-<li><p><strong>next_week</strong> – </p></li>
-<li><p><strong>year_to_change</strong> – </p></li>
-<li><p><strong>user</strong> – </p></li>
+<li><p><strong>today</strong> – current date</p></li>
+<li><p><strong>next_week</strong> – date of next week</p></li>
+<li><p><strong>year_to_change</strong> – year needed to be changed in birthdate</p></li>
+<li><p><strong>user</strong> – current user</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p></p>
+<dd class="field-even"><p>list of found contacts</p>
 </dd>
 </dl>
 </dd></dl>
@@ -433,12 +547,12 @@ inherits from Base class from sqlalchemy</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>email</strong> – str</p></li>
-<li><p><strong>user</strong> – User</p></li>
+<li><p><strong>email</strong> – email of searched contact</p></li>
+<li><p><strong>user</strong> – current user</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>ContactDB</p>
+<dd class="field-even"><p>contact with given email</p>
 </dd>
 </dl>
 </dd></dl>
@@ -447,9 +561,9 @@ inherits from Base class from sqlalchemy</p>
 <dt class="sig sig-object py" id="repository.contacts.ContactRepository.get_by_id">
 <span class="sig-name descname"><span class="pre">get_by_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#models.contacts.User" title="models.contacts.User"><span class="pre">User</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#repository.contacts.ContactRepository.get_by_id" title="Link to this definition">¶</a></dt>
 <dd><p>A method for getting contact by id.
-:param id: int
-:param user: User
-:return: ContactDB</p>
+:param id: id of contact
+:param user: current user
+:return: contact data by id</p>
 </dd></dl>
 
 <dl class="py method">
@@ -459,12 +573,12 @@ inherits from Base class from sqlalchemy</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>lastname</strong> – str</p></li>
-<li><p><strong>user</strong> – User</p></li>
+<li><p><strong>lastname</strong> – lastname of searched contact</p></li>
+<li><p><strong>user</strong> – current user</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>ContactDB</p>
+<dd class="field-even"><p>list of found contacts</p>
 </dd>
 </dl>
 </dd></dl>
@@ -476,12 +590,12 @@ inherits from Base class from sqlalchemy</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>name</strong> – str</p></li>
-<li><p><strong>user</strong> – User</p></li>
+<li><p><strong>name</strong> – firstname of searched contact</p></li>
+<li><p><strong>user</strong> – current user</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>ContactDB</p>
+<dd class="field-even"><p>list of found contacts</p>
 </dd>
 </dl>
 </dd></dl>
@@ -493,13 +607,13 @@ inherits from Base class from sqlalchemy</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>id</strong> – int</p></li>
-<li><p><strong>contact</strong> – ContactDB</p></li>
-<li><p><strong>user</strong> – User</p></li>
+<li><p><strong>id</strong> – id of contact</p></li>
+<li><p><strong>contact</strong> – contact data</p></li>
+<li><p><strong>user</strong> – current user</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>ContactDB</p>
+<dd class="field-even"><p>updated contact data</p>
 </dd>
 </dl>
 </dd></dl>
@@ -516,8 +630,8 @@ inherits from Base class from sqlalchemy</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>email</strong> – str</p></li>
-<li><p><strong>db</strong> – Session</p></li>
+<li><p><strong>email</strong> – email of user that need to be confirmed</p></li>
+<li><p><strong>db</strong> – database session</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -533,12 +647,12 @@ inherits from Base class from sqlalchemy</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>body</strong> – User</p></li>
-<li><p><strong>db</strong> – Session</p></li>
+<li><p><strong>body</strong> – data of new user</p></li>
+<li><p><strong>db</strong> – database session</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>User</p>
+<dd class="field-even"><p>new user</p>
 </dd>
 </dl>
 </dd></dl>
@@ -550,12 +664,12 @@ inherits from Base class from sqlalchemy</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>email</strong> – str</p></li>
-<li><p><strong>db</strong> – Session</p></li>
+<li><p><strong>email</strong> – user email</p></li>
+<li><p><strong>db</strong> – database session</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>User</p>
+<dd class="field-even"><p>found user</p>
 </dd>
 </dl>
 </dd></dl>
@@ -564,9 +678,9 @@ inherits from Base class from sqlalchemy</p>
 <dt class="sig sig-object py" id="repository.users.set_userpic">
 <em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">repository.users.</span></span><span class="sig-name descname"><span class="pre">set_userpic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">userpic</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#models.contacts.User" title="models.contacts.User"><span class="pre">User</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#repository.users.set_userpic" title="Link to this definition">¶</a></dt>
 <dd><p>A method for setting userpic.
-:param userpic: str
-:param db: Session
-:param user: User
+:param userpic: address of userpic
+:param db: database session
+:param user: current user
 :return: None</p>
 </dd></dl>
 
@@ -577,9 +691,9 @@ inherits from Base class from sqlalchemy</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>user</strong> – User</p></li>
-<li><p><strong>token</strong> – str | None</p></li>
-<li><p><strong>db</strong> – Session</p></li>
+<li><p><strong>user</strong> – user owning token</p></li>
+<li><p><strong>token</strong> – token to be updated</p></li>
+<li><p><strong>db</strong> – database session</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -663,6 +777,8 @@ mapping of field names to [<cite>FieldInfo</cite>][pydantic.fields.FieldInfo].</
 <dt class="sig sig-object py" id="schemas.contacts.ContactCreate">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">schemas.contacts.</span></span><span class="sig-name descname"><span class="pre">ContactCreate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">firstname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lastname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">email</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">EmailStr</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phone</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">PhoneNumber</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">birthdate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">date</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#schemas.contacts.ContactCreate" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#schemas.contacts.ContactBase" title="schemas.contacts.ContactBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">ContactBase</span></code></a></p>
+<p>Pydantic schema for creating contacts table
+inherits from ContactBase</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="schemas.contacts.ContactCreate.model_config">
 <span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">ConfigDict</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'validate_assignment':</span> <span class="pre">True}</span></em><a class="headerlink" href="#schemas.contacts.ContactCreate.model_config" title="Link to this definition">¶</a></dt>
@@ -683,10 +799,11 @@ mapping of field names to [<cite>FieldInfo</cite>][pydantic.fields.FieldInfo].</
 <dt class="sig sig-object py" id="schemas.contacts.ContactResponse">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">schemas.contacts.</span></span><span class="sig-name descname"><span class="pre">ContactResponse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">firstname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lastname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">email</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">EmailStr</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phone</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">PhoneNumber</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">birthdate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">date</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#schemas.contacts.ContactResponse" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#schemas.contacts.ContactBase" title="schemas.contacts.ContactBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">ContactBase</span></code></a></p>
-<p>Pydantic schema for contacts table response</p>
+<p>Pydantic schema for contacts table response
+inherits from ContactBase</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>id</strong> – (int) primary key</p>
+<dd class="field-odd"><p><strong>id</strong> – primary key of contact</p>
 </dd>
 </dl>
 <dl class="py class">
@@ -811,8 +928,8 @@ mapping of field names to [<cite>FieldInfo</cite>][pydantic.fields.FieldInfo].</
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">schemas.users.</span></span><span class="sig-name descname"><span class="pre">TokenModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">access_token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">refresh_token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">token_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'bearer'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#schemas.users.TokenModel" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></p>
 <p>Pydantic schema for JWT access and refresh token</p>
-<p>access_token: str
-refresh_token: str
+<p>access_token: JWT token generated for user login
+refresh_token: JWT token generated for user refresh in case of invalid access token
 token_type: str = “bearer”</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="schemas.users.TokenModel.access_token">
@@ -910,7 +1027,7 @@ mapping of field names to [<cite>FieldInfo</cite>][pydantic.fields.FieldInfo].</
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>id</strong> – (integer) primary key</p></li>
-<li><p><strong>email</strong> – (EmailStr) email</p></li>
+<li><p><strong>email</strong> – (EmailStr) email of user</p></li>
 </ul>
 </dd>
 </dl>
@@ -1327,11 +1444,7 @@ mapping of field names to [<cite>FieldInfo</cite>][pydantic.fields.FieldInfo].</
     <h3><a href="#">Table of Contents</a></h3>
     <ul>
 <li><a class="reference internal" href="#">Welcome to Contacts API’s documentation!</a></li>
-<li><a class="reference internal" href="#module-main">REST API main</a><ul>
-<li><a class="reference internal" href="#main.health_check"><code class="docutils literal notranslate"><span class="pre">health_check()</span></code></a></li>
-<li><a class="reference internal" href="#main.startup"><code class="docutils literal notranslate"><span class="pre">startup()</span></code></a></li>
-</ul>
-</li>
+<li><a class="reference internal" href="#rest-api-main">REST API main</a></li>
 <li><a class="reference internal" href="#rest-api-routes-auth">REST API routes Auth</a><ul>
 <li><a class="reference internal" href="#api.auth.confirmed_email"><code class="docutils literal notranslate"><span class="pre">confirmed_email()</span></code></a></li>
 <li><a class="reference internal" href="#api.auth.login"><code class="docutils literal notranslate"><span class="pre">login()</span></code></a></li>
@@ -1384,7 +1497,7 @@ mapping of field names to [<cite>FieldInfo</cite>][pydantic.fields.FieldInfo].</
 </li>
 </ul>
 </li>
-<li><a class="reference internal" href="#module-repository.contacts">REST API repository CONTACTS</a><ul>
+<li><a class="reference internal" href="#rest-api-repository-contacts">REST API repository CONTACTS</a><ul>
 <li><a class="reference internal" href="#repository.contacts.ContactRepository"><code class="docutils literal notranslate"><span class="pre">ContactRepository</span></code></a><ul>
 <li><a class="reference internal" href="#repository.contacts.ContactRepository.create"><code class="docutils literal notranslate"><span class="pre">ContactRepository.create()</span></code></a></li>
 <li><a class="reference internal" href="#repository.contacts.ContactRepository.delete"><code class="docutils literal notranslate"><span class="pre">ContactRepository.delete()</span></code></a></li>

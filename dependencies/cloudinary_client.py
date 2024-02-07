@@ -9,4 +9,8 @@ cloudinary.config(
 
 
 def upload():
+    """
+    function for upload userpic
+    :return: uploader for cloudinary
+    """
     return cloudinary.uploader

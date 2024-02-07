@@ -59,10 +59,9 @@ async def login(body: OAuth2PasswordRequestForm = Depends(),
 
     :param body: OAuth2PasswordRequestForm
     :param db: Session
-    :return: returns access token and refresh token
-
-
+    :return: access token and refresh token
     """
+
     user = await repository_users.get_user_by_email(body.username, db)
     if user is None:
         raise HTTPException(
@@ -93,10 +92,8 @@ async def refresh_token(credentials: HTTPAuthorizationCredentials = Security(sec
     Async function for user refresh token. Takes in user credentials and database session as parameters.
 
     :param credentials: HTTPAuthorizationCredentials
-    :param db: Session
-    :return: returns access token and refresh token
-
-
+    :param db: database session
+    :return: access token and refresh token
     """
 
     token = credentials.credentials
@@ -117,12 +114,11 @@ async def confirmed_email(token: str, db: Session = Depends(get_db)):
     """
     Async function for confirmed email. Takes in user credentials and database session as parameters.
 
-    :param token: str
-    :param db: Session
+    :param token: token from email
+    :param db: database session
     :return: json with success message
-
-
     """
+
     email = auth_service.get_email_from_token(token)
     user = await repository_users.get_user_by_email(email, db)
     if user is None:
@@ -140,10 +136,10 @@ async def request_email(body: RequestEmail, background_tasks: BackgroundTasks,
     """
     Async function for request email. Takes in user credentials and database session as parameters.
 
-    :param body: RequestEmail
-    :param background_tasks: BackgroundTasks
-    :param request: Request
-    :param db: Session
+    :param body: email of user
+    :param background_tasks: task for sending email
+    :param request: request from email
+    :param db: database session
     :return: json with success message
 
     """
@@ -164,10 +160,10 @@ async def upload_userpic(file: UploadFile = File(...), uploader=Depends(upload),
     """
     Async function for upload userpic. Takes in user credentials and database session as parameters.
 
-    :param file: UploadFile
-    :param uploader: Depends(upload)
-    :param current_user: Depends(get_current_user)
-    :param db: Session
+    :param file: file from user
+    :param uploader: cloudinary uploader
+    :param current_user: logged in user
+    :param db: database session
     :return: json with success message
 
     """
