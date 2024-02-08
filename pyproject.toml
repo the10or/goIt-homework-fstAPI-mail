@@ -15,16 +15,22 @@ pydantic-extra-types = "^2.4.1"
 phonenumbers = "^8.13.27"
 faker = "^22.2.0"
 python-jose = "^3.3.0"
-passlib = {extras = ["bcrypt"], version = "^1.7.4"}
+passlib = { extras = ["bcrypt"], version = "^1.7.4" }
 fastapi-mail = "^1.4.1"
 fastapi-limiter = "^0.1.6"
 cloudinary = "^1.38.0"
 python-multipart = "^0.0.6"
-black = {extras = ["d"], version = "^24.1.1"}
+black = { extras = ["d"], version = "^24.1.1" }
+pytest = "^8.0.0"
+pytest-mock = "^3.12.0"
 
 
 [tool.poetry.group.dev.dependencies]
 sphinx = "^7.2.6"
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+
 
 [build-system]
 requires = ["poetry-core"]
