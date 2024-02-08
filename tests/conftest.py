@@ -6,7 +6,7 @@ from sqlalchemy.orm import sessionmaker
 from dependencies.database import get_db
 from main import app
 from models.contacts import Base, User
-from services.auth import auth_service
+from services.auth import auth_service, Auth
 
 SQLALCHEMY_DATABASE_URL = "sqlite:///./test.db"
 
@@ -36,7 +36,7 @@ def session_with_existing_user():
     Base.metadata.create_all(bind=engine)
     db = TestingSessionLocal()
 
-    existing_user = User(email="test_user@test.com", password="test_password")
+    existing_user = User(email="test_user@test.com", password=Auth().get_password_hash("test_password"))
     db.add(existing_user)
     db.commit()
 
@@ -61,21 +61,25 @@ def client(session):
 
 @pytest.fixture(scope="module")
 def user():
-    return {"email": "test_user@test.com", "password": "test_password",
+    return {"email": "test_user@test.com", "password": Auth().get_password_hash("test_password"),
             "access_token": "test_access_token", "refresh_token": "test_refresh_token"}
+
 
 @pytest.fixture(scope="module")
 def client_with_user(session):
-    # create a test client and a test database
     client = TestClient(app)
     db = session
-    # create a test user
-    user = User(email="test_user@test.com", password="test_password")
-    user.password = auth_service.get_password_hash(user.password)
+    user = User(
+        email="test_user@test.com",
+        password="test_password",
+    )
+
+    user.password = Auth().get_password_hash(user.password)
+    user.refresh_token = "refresh_token"
+    user.access_token = "access_token"
     db.add(user)
     db.commit()
     yield client, user
-    # delete the test user and close the database session
     db.delete(user)
     db.commit()
     db.close()

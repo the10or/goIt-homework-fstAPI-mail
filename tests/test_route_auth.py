@@ -21,26 +21,20 @@ def test_create_user_existing_email(client, user, session_with_existing_user):
     assert data["detail"] == "User with this email already exist"
 
 
-def test_login_user(client_with_user, session_with_existing_user, user):
-    current_user: User = session_with_existing_user.query(User).filter(User.email == user.get('email')).first()
+def test_login_user(client, session_with_existing_user, user):
+    current_user: User = session_with_existing_user.query(User).first()
     current_user.confirmed = True
+
     session_with_existing_user.commit()
-    response = client_with_user[0].post(
+    response = client.post(
         "/api/auth/login",
-        data={"username": user.get('email'), "password": user.get('password')},
+        data={"username": user.get('email'), "password": "test_password"},
     )
+
     assert response.status_code == 200, response.text
+
     data = response.json()
     assert data["token_type"] == "bearer"
-
-
-def test_login_wrong_password(client, user):
-    response = client.post("/api/auth/login", data={"username": user["email"], "password": "wrongpassword"})
-    assert response.status_code == 401, response.text
-    data = response.json()
-    assert data["detail"] == "Invalid password"
-    assert "access_token" not in data
-    assert "refresh_token" not in data
 
 
 def test_login_wrong_email(client, user):
@@ -48,5 +42,16 @@ def test_login_wrong_email(client, user):
     assert response.status_code == 401, response.text
     data = response.json()
     assert data["detail"] == "Invalid email"
+    assert "access_token" not in data
+    assert "refresh_token" not in data
+
+
+def test_login_wrong_password(client, user):
+    response = client.post("/api/auth/login",
+                                        data={"username": user["email"], "password": "wrongpassword"})
+
+    assert response.status_code == 401, response.text
+    data = response.json()
+    assert data["detail"] == "Invalid password"
     assert "access_token" not in data
     assert "refresh_token" not in data
